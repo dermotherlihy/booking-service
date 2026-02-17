@@ -1,0 +1,8 @@
+This service is a backend microservice responsible for Bookings in ACD
+e.g., managing bookings, processing booking events, exposing booking APIs>.
+
+It is designed to be:
+- **Reliable** – resilient to failure and production-ready
+- **Observable** – fully instrumented for metrics, tracing, and debugging
+- **Scalable** – built to handle increasing load with minimal operational overhead
+- **Cloud-native** – deployed and managed using infrastructure as code
