@@ -1,4 +1,4 @@
-package com.dermotherlihy.booking_service;
+package com.dermotherlihy.bookingservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
