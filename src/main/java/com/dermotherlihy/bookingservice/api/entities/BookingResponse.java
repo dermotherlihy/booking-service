@@ -9,11 +9,11 @@ public class BookingResponse {
     private String id;
     private String userId;
     private String classId;
-    private String createdAt;
-    private String startsAt;
+    private Instant createdAt;
+    private Instant startsAt;
 
 
-    public BookingResponse(String id, String userId, String classId, String createdAt, String startsAt) {
+    public BookingResponse(String id, String userId, String classId, Instant createdAt, Instant startsAt) {
         this.id = id;
         this.userId = userId;
         this.classId = classId;
@@ -33,11 +33,11 @@ public class BookingResponse {
         return classId;
     }
 
-    public String getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public String getStartsAt() {
+    public Instant getStartsAt() {
         return startsAt;
     }
 }

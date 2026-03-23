@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -66,6 +68,59 @@ public class BookingRepositoryImpl  implements BookingRepository {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Booking> findAll() {
+        String sql = """
+                SELECT id, user_id, class_id, created_at, starts_at
+                FROM booking
+                ORDER BY created_at DESC
+                """;
+
+        List<Booking> results = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new Booking(
+                        UUID.fromString(rs.getString("id")),
+                        rs.getString("user_id"),
+                        rs.getString("class_id"),
+                        rs.getTimestamp("created_at").toInstant(),
+                        rs.getTimestamp("starts_at").toInstant()
+                )
+        );
+        return results == null ? new ArrayList<>() : results;
+    }
+
+    @Override
+    public Optional<Booking> update(UUID id, String userId, String classId, Instant startsAt) {
+        String sql = """
+                UPDATE booking
+                SET user_id = ?, class_id = ?, starts_at = ?
+                WHERE id = ?
+                """;
+
+        int updated = jdbcTemplate.update(
+                sql,
+                userId,
+                classId,
+                Timestamp.from(startsAt),
+                id.toString()
+        );
+
+        if (updated == 0) {
+            return Optional.empty();
+        }
+        return findById(id);
+    }
+
+    @Override
+    public boolean deleteById(UUID id) {
+        String sql = """
+                DELETE FROM booking
+                WHERE id = ?
+                """;
+
+        return jdbcTemplate.update(sql, id.toString()) > 0;
     }
 
 }
