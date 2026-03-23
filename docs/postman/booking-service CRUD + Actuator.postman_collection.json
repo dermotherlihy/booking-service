@@ -1,176 +1,275 @@
 {
   "info": {
-    "_postman_id": "305f65ea-0954-4689-abb7-697dd036af74",
-    "name": "booking-service CRUD + Actuator",
-    "description": "CRUD for /v1/bookings plus /actuator/health and /actuator/info",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "53427999",
-    "_collection_link": "https://go.postman.co/collection/53427999-305f65ea-0954-4689-abb7-697dd036af74?source=collection_link"
+    "name": "booking-service CRUD + Actuator + Metrics",
+    "_postman_id": "e8a88e38-3d54-4ec8-8f90-f9ebf3892ac0",
+    "description": "CRUD for /v1/bookings, actuator health/info, and metrics endpoints including http.server.requests and bookings.created.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Actuator - Health",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/actuator/health",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "actuator",
-            "health"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Actuator - Info",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/actuator/info",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "actuator",
-            "info"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Bookings - List",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/v1/bookings",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "v1",
-            "bookings"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Bookings - Create",
-      "event": [
+      "name": "Actuator",
+      "item": [
         {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "const json = pm.response.json();",
-              "if (json && json.id) {",
-              "  pm.collectionVariables.set('bookingId', json.id);",
-              "  console.log('bookingId set to', json.id);",
-              "} else {",
-              "  console.warn('No id found in response body');",
-              "}"
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/info",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "info"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Metrics Index",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/metrics",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "metrics"
+              ]
+            }
+          }
+        },
+        {
+          "name": "HTTP Requests (count + latency)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/metrics/http.server.requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "metrics",
+                "http.server.requests"
+              ]
+            }
+          }
+        },
+        {
+          "name": "HTTP Requests - Server Errors (5xx)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/metrics/http.server.requests?tag=outcome:SERVER_ERROR",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "metrics",
+                "http.server.requests"
+              ],
+              "query": [
+                {
+                  "key": "tag",
+                  "value": "outcome:SERVER_ERROR"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "HTTP Requests - Client Errors (4xx)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/metrics/http.server.requests?tag=outcome:CLIENT_ERROR",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "metrics",
+                "http.server.requests"
+              ],
+              "query": [
+                {
+                  "key": "tag",
+                  "value": "outcome:CLIENT_ERROR"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Business Metric - bookings.created",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/metrics/bookings.created",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "metrics",
+                "bookings.created"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "List Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "bookings"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json && json.id) {",
+                  "  pm.collectionVariables.set('bookingId', json.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
-            "type": "text/javascript"
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"classId\": \"{{classId}}\",\n  \"startsAt\": \"{{startsAtCreate}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "bookings"
+              ]
+            }
           }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"classId\": \"{{classId}}\",\n  \"startsAt\": \"{{startsAtCreate}}\"\n}"
         },
-        "url": {
-          "raw": "{{baseUrl}}/v1/bookings",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "v1",
-            "bookings"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Bookings - Get by id",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "v1",
-            "bookings",
-            "{{bookingId}}"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Bookings - Update by id",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
+        {
+          "name": "Get Booking by Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "bookings",
+                "{{bookingId}}"
+              ]
+            }
           }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"classId\": \"{{classIdUpdated}}\",\n  \"startsAt\": \"{{startsAtUpdate}}\"\n}"
         },
-        "url": {
-          "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "v1",
-            "bookings",
-            "{{bookingId}}"
-          ]
+        {
+          "name": "Update Booking by Id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"classId\": \"{{classIdUpdated}}\",\n  \"startsAt\": \"{{startsAtUpdate}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "bookings",
+                "{{bookingId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Booking by Id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "bookings",
+                "{{bookingId}}"
+              ]
+            }
+          }
         }
-      },
-      "response": []
-    },
-    {
-      "name": "Bookings - Delete by id",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "v1",
-            "bookings",
-            "{{bookingId}}"
-          ]
-        }
-      },
-      "response": []
+      ]
     }
   ],
   "variable": [

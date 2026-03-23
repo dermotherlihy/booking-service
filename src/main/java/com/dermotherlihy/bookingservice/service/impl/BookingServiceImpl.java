@@ -3,6 +3,8 @@ package com.dermotherlihy.bookingservice.service.impl;
 import com.dermotherlihy.bookingservice.domain.Booking;
 import com.dermotherlihy.bookingservice.repository.BookingRepository;
 import com.dermotherlihy.bookingservice.service.BookingService;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,9 +17,13 @@ import java.util.UUID;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
+    private final Counter bookingsCreatedCounter;
 
-    public BookingServiceImpl(BookingRepository bookingRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, MeterRegistry meterRegistry) {
         this.bookingRepository = bookingRepository;
+        this.bookingsCreatedCounter = Counter.builder("bookings.created")
+                .description("Total number of bookings created")
+                .register(meterRegistry);
     }
 
     @Override
@@ -32,7 +38,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking createBooking(String userId, String classId, Instant startsAt) {
-        return bookingRepository.save(userId, classId, startsAt);
+        Booking booking = bookingRepository.save(userId, classId, startsAt);
+        bookingsCreatedCounter.increment();
+        return booking;
     }
 
     @Override
