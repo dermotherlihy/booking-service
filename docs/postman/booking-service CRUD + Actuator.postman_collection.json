@@ -1,0 +1,206 @@
+{
+  "info": {
+    "_postman_id": "305f65ea-0954-4689-abb7-697dd036af74",
+    "name": "booking-service CRUD + Actuator",
+    "description": "CRUD for /v1/bookings plus /actuator/health and /actuator/info",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53427999",
+    "_collection_link": "https://go.postman.co/collection/53427999-305f65ea-0954-4689-abb7-697dd036af74?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Actuator - Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/actuator/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "actuator",
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actuator - Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/actuator/info",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "actuator",
+            "info"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bookings - List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/bookings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bookings - Create",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json && json.id) {",
+              "  pm.collectionVariables.set('bookingId', json.id);",
+              "  console.log('bookingId set to', json.id);",
+              "} else {",
+              "  console.warn('No id found in response body');",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"classId\": \"{{classId}}\",\n  \"startsAt\": \"{{startsAtCreate}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/bookings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bookings - Get by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "bookings",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bookings - Update by id",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"classId\": \"{{classIdUpdated}}\",\n  \"startsAt\": \"{{startsAtUpdate}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "bookings",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bookings - Delete by id",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/bookings/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "bookings",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "userId",
+      "value": "user-1"
+    },
+    {
+      "key": "classId",
+      "value": "class-1"
+    },
+    {
+      "key": "classIdUpdated",
+      "value": "class-2"
+    },
+    {
+      "key": "startsAtCreate",
+      "value": "2026-03-24T10:15:30Z"
+    },
+    {
+      "key": "startsAtUpdate",
+      "value": "2026-03-25T10:15:30Z"
+    },
+    {
+      "key": "bookingId",
+      "value": ""
+    }
+  ]
+}
